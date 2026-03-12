@@ -1,0 +1,3415 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAR & OAK | نار وأوك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   CSS CUSTOM PROPERTIES
+   ═══════════════════════════════════════════ */
+:root {
+  --charcoal: #111111;
+  --dark-grey: #1A1A1A;
+  --ember: #C84B31;
+  --ember-glow: #E05A3A;
+  --ember-deep: #A33B24;
+  --oak: #8B6914;
+  --oak-light: #B8922A;
+  --sand: #E8DCC8;
+  --smoke: #7A7A7A;
+  --cream: #FAF6F0;
+  --copper: #B87333;
+  --deep-brown: #2C1810;
+  --white: #FFFFFF;
+  --dark-surface: #1E1E1E;
+  --dark-card: #161616;
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-ember: rgba(200, 75, 49, 0.15);
+  --glow-ember: rgba(200, 75, 49, 0.08);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--charcoal);
+  color: var(--sand);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* Ambient glow */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 15% 50%, rgba(200, 75, 49, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 20%, rgba(139, 105, 20, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(200, 75, 49, 0.02) 0%, transparent 40%);
+}
+
+body > * { position: relative; z-index: 1; }
+
+a { color: var(--ember); text-decoration: none; transition: color 0.3s; }
+a:hover { color: var(--ember-glow); }
+img { max-width: 100%; display: block; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+::selection { background: var(--ember); color: var(--cream); }
+
+/* ═══════════════════════════════════════════
+   RTL SUPPORT
+   ═══════════════════════════════════════════ */
+html[dir="rtl"] .hero-slogan,
+html[dir="rtl"] .story-text,
+html[dir="rtl"] .story-content { direction: rtl; text-align: right; }
+html[dir="rtl"] .menu-item { direction: rtl; text-align: right; }
+html[dir="rtl"] .menu-item-price { text-align: left; }
+html[dir="rtl"] .fire-card p,
+html[dir="rtl"] .fire-card h3 { direction: rtl; text-align: right; }
+html[dir="rtl"] .footer-desc { direction: rtl; text-align: right; }
+html[dir="rtl"] .story-quote { border-left: none; border-right: 3px solid var(--ember); padding-left: 0; padding-right: 24px; }
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 24px 0;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  background: transparent;
+}
+
+nav.scrolled {
+  background: rgba(17, 17, 17, 0.92);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  padding: 14px 0;
+  box-shadow: 0 1px 0 var(--border-subtle), 0 8px 40px rgba(0,0,0,0.4);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo { display: flex; align-items: center; }
+
+.nav-logo img {
+  height: 48px;
+  width: auto;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+  mix-blend-mode: screen;
+}
+
+nav.scrolled .nav-logo img { height: 36px; }
+
+.nav-links { display: flex; gap: 36px; align-items: center; }
+
+.nav-links a {
+  color: rgba(232, 220, 200, 0.7);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  position: relative;
+  padding: 4px 0;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 50%;
+  width: 0; height: 2px;
+  background: var(--ember);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(-50%);
+}
+
+.nav-links a:hover { color: var(--cream); }
+.nav-links a:hover::after { width: 100%; }
+
+.lang-toggle {
+  background: transparent;
+  border: 1px solid rgba(232, 220, 200, 0.2);
+  color: var(--sand);
+  padding: 7px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 1px;
+  font-family: 'Inter', sans-serif;
+}
+
+.lang-toggle:hover {
+  border-color: var(--ember);
+  color: var(--ember);
+  background: rgba(200, 75, 49, 0.05);
+}
+
+/* Mobile nav */
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+  position: relative;
+  z-index: 1001;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--sand);
+  margin: 6px 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+.nav-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 7px); }
+.nav-hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -7px); }
+
+@media (max-width: 768px) {
+  .nav-hamburger { display: block; }
+  .nav-links {
+    position: fixed;
+    top: 0; right: -100%;
+    width: 300px; height: 100vh;
+    background: rgba(17, 17, 17, 0.98);
+    backdrop-filter: blur(30px);
+    flex-direction: column;
+    justify-content: center;
+    gap: 32px;
+    transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+    border-left: 1px solid var(--border-subtle);
+  }
+  .nav-links.open { right: 0; }
+  .nav-links a { font-size: 16px; letter-spacing: 2px; }
+}
+
+/* ═══════════════════════════════════════════
+   HERO SECTION
+   ═══════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+  background: url('https://i.ibb.co/9Hcw5mVg/hero-page.png') center center / cover no-repeat;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(17, 17, 17, 0.65) 0%,
+      rgba(17, 17, 17, 0.30) 35%,
+      rgba(17, 17, 17, 0.25) 55%,
+      rgba(17, 17, 17, 0.70) 100%
+    );
+  z-index: 1;
+}
+
+/* Warm ember glow at bottom */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 40%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(200, 75, 49, 0.12) 0%, transparent 70%);
+  z-index: 1;
+}
+
+.hero > * { position: relative; z-index: 2; }
+
+.hero-brand { margin-bottom: 12px; }
+
+.hero-brand img {
+  height: clamp(110px, 20vw, 240px);
+  width: auto;
+  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.4));
+  animation: heroLogoIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  mix-blend-mode: screen;
+}
+
+.hero-arabic {
+  font-size: clamp(24px, 4.5vw, 44px);
+  color: var(--ember);
+  opacity: 0;
+  margin-bottom: 40px;
+  font-weight: 300;
+  letter-spacing: 6px;
+  animation: heroFadeUp 1s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-slogan {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px, 3.2vw, 32px);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--cream);
+  opacity: 0;
+  margin-bottom: 12px;
+  max-width: 650px;
+  line-height: 1.5;
+  animation: heroFadeUp 1s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-slogan-ar {
+  font-size: clamp(16px, 2.5vw, 22px);
+  color: var(--smoke);
+  margin-bottom: 48px;
+  font-weight: 300;
+  opacity: 0;
+  animation: heroFadeUp 1s 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-tagline {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: var(--smoke);
+  margin-bottom: 48px;
+  font-weight: 500;
+  opacity: 0;
+  animation: heroFadeUp 1s 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--ember);
+  color: var(--cream);
+  padding: 18px 48px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: heroFadeUp 1s 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.hero-cta:hover {
+  background: var(--ember-glow);
+  color: var(--white);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(200, 75, 49, 0.35), 0 0 0 1px rgba(200, 75, 49, 0.2);
+}
+
+.hero-cta:hover::before { opacity: 1; }
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: heroFadeUp 1s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.scroll-indicator span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: rgba(232, 220, 200, 0.35);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(200, 75, 49, 0.5), transparent);
+  animation: scrollPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes heroLogoIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.6; transform: scaleY(1); }
+  50% { opacity: 0.2; transform: scaleY(0.5); transform-origin: top; }
+}
+
+/* ═══════════════════════════════════════════
+   DIVIDER
+   ═══════════════════════════════════════════ */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-ember), var(--ember), var(--border-ember), transparent);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION STYLES
+   ═══════════════════════════════════════════ */
+section { padding: 120px 0; position: relative; }
+
+.section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: var(--ember);
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--ember);
+}
+
+.section-label.centered {
+  justify-content: center;
+}
+
+.section-label.centered::after {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--ember);
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 20px;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  color: var(--smoke);
+  max-width: 560px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.ember-line {
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ember), var(--ember-deep));
+  margin: 28px 0;
+  border-radius: 1px;
+  position: relative;
+}
+
+.ember-line::after {
+  content: '';
+  position: absolute;
+  top: -3px; left: -3px;
+  right: -3px; bottom: -3px;
+  background: var(--ember);
+  opacity: 0.15;
+  border-radius: 4px;
+  filter: blur(6px);
+}
+
+/* ═══════════════════════════════════════════
+   STORY SECTION
+   ═══════════════════════════════════════════ */
+.story { padding: 140px 0; }
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.story-visual {
+  aspect-ratio: 4/5;
+  background: var(--dark-surface);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.story-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(200,75,49,0.08), transparent 50%),
+    linear-gradient(315deg, rgba(139, 105, 20, 0.06), transparent 50%);
+}
+
+/* Animated border glow */
+.story-visual::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, rgba(200,75,49,0.2), transparent 40%, transparent 60%, rgba(139, 105, 20, 0.15));
+  z-index: -1;
+  border-radius: 2px;
+}
+
+.story-visual-label {
+  font-size: 12px;
+  color: var(--smoke);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.story-visual-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+  position: relative;
+  opacity: 0.25;
+  filter: grayscale(0.2);
+}
+
+.story-content { max-width: 500px; }
+
+.story-text {
+  font-size: 16px;
+  line-height: 2;
+  color: rgba(232, 220, 200, 0.75);
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+
+.story-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-style: italic;
+  color: var(--ember);
+  border-left: 2px solid var(--ember);
+  padding-left: 28px;
+  margin: 48px 0;
+  line-height: 1.6;
+  position: relative;
+}
+
+.story-quote::before {
+  content: '\201C';
+  position: absolute;
+  top: -20px;
+  left: 28px;
+  font-size: 60px;
+  color: var(--ember);
+  opacity: 0.15;
+  font-family: 'Playfair Display', serif;
+  line-height: 1;
+}
+
+.story-quote-ar {
+  font-size: 18px;
+  color: var(--smoke);
+  margin-top: 12px;
+  font-style: normal;
+  opacity: 0.6;
+}
+
+/* Two fires */
+.two-fires {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 64px;
+}
+
+.fire-card {
+  padding: 40px 32px;
+  border: 1px solid var(--border-subtle);
+  background: var(--dark-card);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 2px;
+}
+
+.fire-card:hover {
+  border-color: var(--border-ember);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+}
+
+.fire-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  transition: height 0.4s;
+}
+
+.fire-card:hover::before { height: 4px; }
+
+.fire-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.fire-card.egyptian::before { background: linear-gradient(90deg, var(--ember), var(--ember-glow)); }
+.fire-card.egyptian::after { background: radial-gradient(ellipse at 50% 0%, rgba(200,75,49,0.06), transparent 70%); }
+.fire-card.texan::before { background: linear-gradient(90deg, var(--oak), var(--oak-light)); }
+.fire-card.texan::after { background: radial-gradient(ellipse at 50% 0%, rgba(139,105,20,0.06), transparent 70%); }
+
+.fire-card:hover::after { opacity: 1; }
+
+.fire-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 6px;
+  position: relative;
+}
+
+.fire-card .fire-subtitle {
+  font-size: 12px;
+  color: var(--smoke);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.fire-card p {
+  font-size: 15px;
+  color: rgba(232, 220, 200, 0.65);
+  line-height: 1.8;
+  font-weight: 300;
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .story-grid { grid-template-columns: 1fr; gap: 48px; }
+  .story-visual { max-height: 400px; }
+  .two-fires { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   MENU SECTION
+   ═══════════════════════════════════════════ */
+.menu {
+  padding: 140px 0;
+  position: relative;
+}
+
+.menu::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.15) 30%, rgba(0,0,0,0.15) 70%, transparent 100%);
+  pointer-events: none;
+}
+
+.menu-header {
+  text-align: center;
+  margin-bottom: 64px;
+  position: relative;
+}
+
+.menu-header .ember-line { margin: 28px auto; }
+
+/* Category tabs */
+.menu-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.menu-tab {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--smoke);
+  padding: 12px 28px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Inter', sans-serif;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ember);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.menu-tab:hover {
+  border-color: var(--ember);
+  color: var(--sand);
+}
+
+.menu-tab.active {
+  border-color: var(--ember);
+  color: var(--cream);
+}
+
+.menu-tab.active::before { transform: scaleX(1); }
+
+/* Menu grid */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+.menu-item {
+  background: var(--dark-card);
+  border: 1px solid var(--border-subtle);
+  padding: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.menu-item-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.menu-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+  filter: brightness(0.85) saturate(0.9);
+}
+
+.menu-item:hover .menu-item-image img {
+  transform: scale(1.08);
+  filter: brightness(0.95) saturate(1);
+}
+
+.menu-item-image::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 50%;
+  background: linear-gradient(to top, var(--dark-card), transparent);
+  pointer-events: none;
+}
+
+.menu-item-body {
+  padding: 24px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, var(--ember), transparent 80%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.menu-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 0% 0%, var(--glow-ember), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.menu-item:hover {
+  border-color: var(--border-ember);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+}
+
+.menu-item:hover::before { opacity: 1; }
+.menu-item:hover::after { opacity: 1; }
+
+.menu-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.menu-item-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.3;
+}
+
+.menu-item-name-ar {
+  font-size: 14px;
+  color: rgba(232, 220, 200, 0.35);
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.menu-item-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ember);
+  white-space: nowrap;
+  position: relative;
+}
+
+.menu-item-desc {
+  font-size: 14px;
+  color: rgba(232, 220, 200, 0.5);
+  line-height: 1.8;
+  flex-grow: 1;
+  margin-bottom: 20px;
+  font-weight: 300;
+  position: relative;
+}
+
+.menu-item-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.menu-tag {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--oak-light);
+  background: rgba(139, 105, 20, 0.1);
+  padding: 4px 12px;
+  border-radius: 2px;
+  font-weight: 600;
+  border: 1px solid rgba(139, 105, 20, 0.12);
+}
+
+.menu-item-order {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid rgba(200, 75, 49, 0.4);
+  color: var(--ember);
+  padding: 13px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-item-order::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ember);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.menu-item-order:hover {
+  color: var(--cream);
+  border-color: var(--ember);
+  box-shadow: 0 4px 20px rgba(200, 75, 49, 0.2);
+}
+
+.menu-item-order:hover::before { transform: scaleY(1); }
+
+.menu-item-order svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* Placeholder state */
+.menu-placeholder {
+  text-align: center;
+  padding: 100px 24px;
+  color: var(--smoke);
+}
+
+.menu-placeholder p { font-size: 16px; margin-bottom: 8px; }
+.menu-placeholder small { font-size: 13px; opacity: 0.5; }
+
+@media (max-width: 768px) {
+  .menu-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   GALLERY SECTION
+   ═══════════════════════════════════════════ */
+.gallery { padding: 140px 0; }
+
+.gallery-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.gallery-header .ember-line { margin: 28px auto; }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 300px 300px;
+  gap: 12px;
+}
+
+.gallery-item {
+  background: var(--dark-surface);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.gallery-item:nth-child(1) { grid-row: span 2; }
+
+.gallery-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(200,75,49,0.05), transparent 50%);
+  transition: all 0.4s;
+}
+
+.gallery-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  transition: border-color 0.4s;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.gallery-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  z-index: 2;
+}
+
+.gallery-item:hover::before {
+  background: linear-gradient(135deg, rgba(200,75,49,0.1), transparent 60%);
+}
+
+.gallery-item:hover::after {
+  border-color: var(--border-ember);
+}
+
+.gallery-placeholder-icon {
+  font-size: 40px;
+  opacity: 0.15;
+  margin-bottom: 16px;
+  position: relative;
+  transition: all 0.4s;
+}
+
+.gallery-item:hover .gallery-placeholder-icon {
+  opacity: 0.3;
+  transform: scale(1.1);
+}
+
+.gallery-placeholder-text {
+  font-size: 11px;
+  color: var(--smoke);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  position: relative;
+  opacity: 0.5;
+  transition: all 0.4s;
+}
+
+.gallery-item:hover .gallery-placeholder-text {
+  opacity: 0.8;
+  color: var(--sand);
+}
+
+@media (max-width: 768px) {
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  .gallery-item { min-height: 220px; }
+  .gallery-item:nth-child(1) { grid-row: span 1; grid-column: span 2; min-height: 280px; }
+}
+
+/* ═══════════════════════════════════════════
+   FEATURES / WHY US
+   ═══════════════════════════════════════════ */
+.features {
+  padding: 100px 0;
+  position: relative;
+}
+
+.features::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, rgba(200, 75, 49, 0.03) 50%, transparent);
+  pointer-events: none;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  text-align: center;
+  position: relative;
+}
+
+.feature-item {
+  padding: 20px;
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.feature-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--border-ember);
+  border-radius: 50%;
+  transition: all 0.4s;
+}
+
+.feature-item:hover .feature-icon::before {
+  border-color: var(--ember);
+  box-shadow: 0 0 24px rgba(200, 75, 49, 0.15);
+}
+
+.feature-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--ember);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.feature-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 12px;
+}
+
+.feature-desc {
+  font-size: 14px;
+  color: var(--smoke);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+@media (max-width: 768px) {
+  .features-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* ═══════════════════════════════════════════
+   WHATSAPP FLOATING BUTTON
+   ═══════════════════════════════════════════ */
+.whatsapp-float {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 999;
+  background: #25D366;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(37, 211, 102, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 8px 36px rgba(37, 211, 102, 0.45);
+}
+
+.whatsapp-float svg { width: 30px; height: 30px; fill: white; }
+
+/* Pulse ring */
+.whatsapp-float::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, 0.3);
+  animation: whatsappPulse 2s ease-out infinite;
+}
+
+@keyframes whatsappPulse {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+footer {
+  padding: 100px 0 48px;
+  border-top: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ember), transparent);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 72px;
+}
+
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.footer-brand span { color: var(--ember); }
+
+.footer-brand-ar {
+  font-size: 18px;
+  color: var(--ember);
+  opacity: 0.5;
+  margin-bottom: 20px;
+}
+
+.footer-desc {
+  font-size: 14px;
+  color: var(--smoke);
+  line-height: 1.9;
+  max-width: 320px;
+  font-weight: 300;
+}
+
+.footer-heading {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--cream);
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 14px; }
+
+.footer-links a {
+  font-size: 14px;
+  color: var(--smoke);
+  transition: all 0.3s;
+  font-weight: 300;
+  position: relative;
+}
+
+.footer-links a:hover { color: var(--sand); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footer-bottom p {
+  font-size: 12px;
+  color: var(--smoke);
+  opacity: 0.5;
+  letter-spacing: 1px;
+}
+
+.footer-social { display: flex; gap: 12px; }
+
+.footer-social a {
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  color: var(--smoke);
+}
+
+.footer-social a:hover {
+  border-color: var(--ember);
+  color: var(--ember);
+  background: rgba(200, 75, 49, 0.06);
+  transform: translateY(-2px);
+}
+
+.footer-social a svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger children */
+.stagger-children > *:nth-child(1) { transition-delay: 0s; }
+.stagger-children > *:nth-child(2) { transition-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { transition-delay: 0.2s; }
+.stagger-children > *:nth-child(4) { transition-delay: 0.3s; }
+.stagger-children > *:nth-child(5) { transition-delay: 0.4s; }
+
+/* Ember glow animation */
+@keyframes emberGlow {
+  0%, 100% { opacity: 0.5; filter: blur(6px); }
+  50% { opacity: 0.8; filter: blur(8px); }
+}
+
+/* ═══════════════════════════════════════════
+   CART ICON (NAV)
+   ═══════════════════════════════════════════ */
+.nav-cart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-cart-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--sand);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s;
+}
+
+.nav-cart-btn:hover svg { stroke: var(--ember); }
+
+.nav-cart-count {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: var(--ember);
+  color: var(--cream);
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.mobile-cart-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 4px;
+  margin-right: 12px;
+}
+
+.mobile-cart-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--sand);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mobile-cart-count {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  background: var(--ember);
+  color: var(--cream);
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+@media (max-width: 768px) {
+  .mobile-cart-btn { display: flex; align-items: center; }
+}
+
+/* ═══════════════════════════════════════════
+   CART DRAWER
+   ═══════════════════════════════════════════ */
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.cart-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 400px;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--dark-surface);
+  border-left: 1px solid var(--border-subtle);
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -16px 0 48px rgba(0,0,0,0.4);
+}
+
+.cart-drawer.open { right: 0; }
+
+html[dir="rtl"] .cart-drawer {
+  right: auto;
+  left: -420px;
+  border-left: none;
+  border-right: 1px solid var(--border-subtle);
+  box-shadow: 16px 0 48px rgba(0,0,0,0.4);
+}
+
+html[dir="rtl"] .cart-drawer.open { left: 0; }
+
+.cart-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cart-drawer-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.cart-close-btn {
+  background: none;
+  border: none;
+  color: var(--smoke);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.3s;
+  line-height: 1;
+}
+
+.cart-close-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.cart-close-btn:hover { color: var(--cream); }
+
+.cart-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+.cart-item {
+  display: flex;
+  gap: 14px;
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--border-subtle);
+  align-items: center;
+}
+
+.cart-item-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cart-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-item-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item-price-line {
+  font-size: 12px;
+  color: var(--smoke);
+}
+
+.cart-item-price {
+  font-size: 13px;
+  color: var(--ember);
+  font-weight: 500;
+}
+
+.cart-remove-btn {
+  background: none;
+  border: none;
+  color: var(--smoke);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.3s;
+  margin-left: 6px;
+}
+
+.cart-remove-btn:hover { color: #e74c3c; }
+
+html[dir="rtl"] .cart-remove-btn { margin-left: 0; margin-right: 6px; }
+
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cart-qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(200,75,49,0.4);
+  background: transparent;
+  color: var(--ember);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+}
+
+.cart-qty-btn:hover {
+  background: var(--ember);
+  color: var(--cream);
+  border-color: var(--ember);
+}
+
+.cart-qty-num {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cream);
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-item-total {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ember);
+  min-width: 60px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 28px;
+  text-align: center;
+  color: var(--smoke);
+  gap: 16px;
+}
+
+.cart-empty-icon { font-size: 48px; opacity: 0.3; }
+
+.cart-empty p { font-size: 15px; }
+
+.cart-empty-btn {
+  background: transparent;
+  border: 1px solid var(--ember);
+  color: var(--ember);
+  padding: 10px 24px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s;
+  margin-top: 8px;
+}
+
+.cart-empty-btn:hover {
+  background: var(--ember);
+  color: var(--cream);
+}
+
+.cart-drawer-footer {
+  padding: 20px 28px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--dark-card);
+}
+
+.cart-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.cart-total-label {
+  font-size: 14px;
+  color: var(--smoke);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.cart-total-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.cart-checkout-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--ember);
+  color: var(--cream);
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cart-checkout-btn:hover {
+  background: var(--ember-glow);
+}
+
+@media (max-width: 768px) {
+  .cart-drawer { width: 100vw; right: -100vw; }
+  html[dir="rtl"] .cart-drawer { left: -100vw; }
+}
+
+/* ═══════════════════════════════════════════
+   MENU ADD-TO-CART CONTROLS
+   ═══════════════════════════════════════════ */
+.menu-cart-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.menu-cart-controls .cart-qty-btn {
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+}
+
+.menu-cart-controls .cart-qty-num {
+  font-size: 18px;
+  min-width: 28px;
+}
+
+@keyframes addToCartPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.menu-item.just-added {
+  animation: addToCartPop 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════
+   CHECKOUT MODAL
+   ═══════════════════════════════════════════ */
+.checkout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1003;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.checkout-overlay.open { display: flex; }
+
+.checkout-modal {
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--dark-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  position: relative;
+  padding: 32px;
+}
+
+.checkout-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--smoke);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.3s;
+  z-index: 2;
+}
+
+.checkout-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+.checkout-close:hover { color: var(--cream); }
+
+html[dir="rtl"] .checkout-close { right: auto; left: 16px; }
+
+.checkout-section-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ember);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+}
+
+.checkout-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 32px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.checkout-modal-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.checkout-modal-close {
+  background: none;
+  border: none;
+  color: var(--smoke);
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.checkout-modal-close:hover { color: var(--cream); }
+
+.checkout-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 32px 0;
+}
+
+.checkout-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  transition: all 0.3s;
+}
+
+.checkout-dot.active { background: var(--ember); width: 24px; border-radius: 4px; }
+.checkout-dot.done { background: var(--ember); opacity: 0.5; }
+
+.checkout-step {
+  padding: 28px 32px 32px;
+  display: none;
+}
+
+.checkout-step.active { display: block; }
+
+.checkout-section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--ember);
+  font-weight: 600;
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+
+.checkout-section-title:first-child { margin-top: 0; }
+
+/* Order Summary in checkout */
+.checkout-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--sand);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.checkout-summary-item span:first-child { opacity: 0.7; }
+.checkout-summary-item span:last-child { color: var(--cream); font-weight: 500; }
+
+.checkout-summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.checkout-summary-total span:last-child { color: var(--ember); }
+
+/* Payment method cards */
+.payment-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.payment-option {
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+}
+
+.payment-option:hover { border-color: rgba(200,75,49,0.3); }
+
+.payment-option.selected {
+  border-color: var(--ember);
+  background: rgba(200,75,49,0.08);
+}
+
+.payment-option-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+
+.payment-option-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: 0.5px;
+}
+
+.payment-option-sub {
+  font-size: 10px;
+  color: var(--smoke);
+  margin-top: 4px;
+  display: block;
+}
+
+/* Delivery time */
+.time-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.time-option {
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--sand);
+}
+
+.time-option:hover { border-color: rgba(200,75,49,0.3); }
+
+.time-option.selected {
+  border-color: var(--ember);
+  background: rgba(200,75,49,0.08);
+  color: var(--cream);
+}
+
+.time-option.asap {
+  grid-column: span 3;
+  font-weight: 600;
+  color: var(--ember);
+}
+
+/* Checkout path buttons */
+.checkout-paths {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.checkout-path-btn {
+  padding: 20px 16px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 4px;
+  transition: all 0.3s;
+  font-family: 'Inter', sans-serif;
+}
+
+.checkout-path-btn:hover { transform: translateY(-2px); }
+
+.checkout-path-btn.whatsapp {
+  border-color: rgba(37, 211, 102, 0.3);
+}
+
+.checkout-path-btn.whatsapp:hover {
+  border-color: #25D366;
+  background: rgba(37, 211, 102, 0.08);
+}
+
+.checkout-path-btn.website {
+  border-color: rgba(200,75,49,0.3);
+}
+
+.checkout-path-btn.website:hover {
+  border-color: var(--ember);
+  background: rgba(200,75,49,0.08);
+}
+
+.checkout-path-icon { font-size: 28px; margin-bottom: 10px; display: block; }
+
+.checkout-path-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.checkout-path-sub {
+  font-size: 11px;
+  color: var(--smoke);
+  margin-top: 4px;
+  display: block;
+}
+
+/* Auth forms */
+.auth-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 12px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--smoke);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.auth-tab.active {
+  color: var(--ember);
+  border-bottom-color: var(--ember);
+}
+
+.checkout-form-group {
+  margin-bottom: 16px;
+}
+
+.checkout-form-group label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--smoke);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.checkout-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-subtle);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.checkout-input:focus { border-color: var(--ember); }
+.checkout-input::placeholder { color: var(--smoke); opacity: 0.5; }
+
+.checkout-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-subtle);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.checkout-textarea:focus { border-color: var(--ember); }
+
+.checkout-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--ember);
+  color: var(--cream);
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.checkout-submit-btn:hover { background: var(--ember-glow); }
+
+.checkout-submit-btn.green {
+  background: #25D366;
+}
+
+.checkout-submit-btn.green:hover {
+  background: #20bd5a;
+}
+
+.checkout-back-btn {
+  background: none;
+  border: none;
+  color: var(--smoke);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: color 0.3s;
+  display: block;
+  margin: 12px auto 0;
+}
+
+.checkout-back-btn:hover { color: var(--cream); }
+
+/* Confirmation */
+.checkout-confirm {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.checkout-confirm-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.checkout-confirm h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: 12px;
+}
+
+.checkout-confirm p {
+  font-size: 14px;
+  color: var(--smoke);
+  line-height: 1.8;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.checkout-confirm-order-id {
+  display: inline-block;
+  background: rgba(200,75,49,0.1);
+  border: 1px solid rgba(200,75,49,0.2);
+  color: var(--ember);
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin: 16px 0;
+  border-radius: 4px;
+}
+
+.checkout-error {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.checkout-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 24px 0;
+}
+
+@media (max-width: 768px) {
+  .checkout-modal { max-height: 100vh; max-height: 100dvh; border-radius: 0; }
+  .checkout-overlay { padding: 0; }
+  .payment-options { grid-template-columns: 1fr; }
+  .time-options { grid-template-columns: repeat(2, 1fr); }
+  .time-option.asap { grid-column: span 2; }
+  .checkout-paths { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+     ═══════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <img src="https://i.ibb.co/9kVvG4Rb/NAR-OAK-LOGO-final.png" alt="Nar & Oak">
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#story" data-en="Our Story" data-ar="قصتنا">Our Story</a>
+      <a href="#menu" data-en="Menu" data-ar="القائمة">Menu</a>
+      <a href="#gallery" data-en="Gallery" data-ar="المعرض">Gallery</a>
+      <a href="#contact" data-en="Contact" data-ar="تواصل">Contact</a>
+      <button class="nav-cart-btn" id="navCartBtn" onclick="toggleCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <span class="nav-cart-count" id="navCartCount">0</span>
+      </button>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">عربي</button>
+    </div>
+    <button class="mobile-cart-btn" id="mobileCartBtn" onclick="toggleCart()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      <span class="nav-cart-count" id="mobileCartCount">0</span>
+    </button>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-brand">
+    <img src="https://i.ibb.co/9kVvG4Rb/NAR-OAK-LOGO-final.png" alt="Nar & Oak">
+  </div>
+  <div class="hero-arabic">نار وأوك</div>
+  <div class="hero-slogan" id="heroSlogan">The desert taught us fire. Texas taught us patience.</div>
+  <div class="hero-slogan-ar" id="heroSloganAr">الصحراء علمتنا النار. تكساس علمتنا الصبر.</div>
+  <div class="hero-tagline" data-en="Hurghada, Red Sea" data-ar="الغردقة، البحر الأحمر">Hurghada, Red Sea</div>
+  <a href="#menu" class="hero-cta" data-en="View Menu" data-ar="عرض القائمة">View Menu</a>
+  <div class="scroll-indicator">
+    <span data-en="Scroll" data-ar="مرر">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     STORY
+     ═══════════════════════════════════════════ -->
+<section class="story" id="story">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-visual fade-in-left">
+        <div class="story-visual-icon">🔥</div>
+        <div class="story-visual-label">Brand Photo</div>
+      </div>
+      <div class="story-content fade-in-right">
+        <div class="section-label" data-en="Our Story" data-ar="قصتنا">Our Story</div>
+        <h2 class="section-title" data-en="Two Fires. One Table." data-ar="ناران. مائدة واحدة.">Two Fires. One Table.</h2>
+        <div class="ember-line"></div>
+        <p class="story-text" data-en="Before there was Nar & Oak, there were two fires burning 12,000 kilometers apart. One was born in the Egyptian desert — bread baked in sand, meat charred over open flame, thousands of years of heat and instinct. The other grew in the hills of central Texas — oak logs, low heat, fourteen hours of patience and smoke." data-ar="قبل نار وأوك، كانت هناك ناران تشتعلان على بُعد ١٢ ألف كيلومتر. واحدة وُلدت في الصحراء المصرية — خبز مخبوز في الرمل، لحم محمّر على النار المفتوحة، آلاف السنين من الحرارة والغريزة. والأخرى نمت في تلال وسط تكساس — خشب البلوط، حرارة هادئة، أربع عشرة ساعة من الصبر والدخان.">Before there was Nar & Oak, there were two fires burning 12,000 kilometers apart. One was born in the Egyptian desert — bread baked in sand, meat charred over open flame, thousands of years of heat and instinct. The other grew in the hills of central Texas — oak logs, low heat, fourteen hours of patience and smoke.</p>
+        <p class="story-text" data-en="They never should have met. But fire doesn't care about borders. Nar & Oak is where these two ancient traditions finally sit at one table, on the shores of the Red Sea." data-ar="ما كان لهما أن يلتقيا. لكن النار لا تعرف الحدود. نار وأوك هو المكان الذي تجلس فيه هاتان التقاليد العريقة أخيراً على مائدة واحدة، على شواطئ البحر الأحمر.">They never should have met. But fire doesn't care about borders. Nar & Oak is where these two ancient traditions finally sit at one table, on the shores of the Red Sea.</p>
+        <div class="story-quote">
+          Fire crossed an ocean to find its other half.
+          <div class="story-quote-ar">النار عبرت المحيط لتجد نصفها الآخر</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-fires fade-in stagger-children">
+      <div class="fire-card egyptian">
+        <h3 data-en="The Egyptian Flame" data-ar="اللهب المصري">The Egyptian Flame</h3>
+        <div class="fire-subtitle" data-en="نار — Nar" data-ar="نار — Nar">نار — Nar</div>
+        <p data-en="Open-fire cooking passed down through generations. Direct flame, intense heat, instinct over instruments. From clay ovens to charcoal pits — this is fire at its most primal." data-ar="طهي على النار المفتوحة توارثته الأجيال. لهب مباشر، حرارة شديدة، غريزة فوق الأدوات. من الأفران الطينية إلى حُفر الفحم — هذه هي النار في أبسط صورها.">Open-fire cooking passed down through generations. Direct flame, intense heat, instinct over instruments. From clay ovens to charcoal pits — this is fire at its most primal.</p>
+      </div>
+      <div class="fire-card texan">
+        <h3 data-en="The Texas Smoke" data-ar="دخان تكساس">The Texas Smoke</h3>
+        <div class="fire-subtitle" data-en="Oak — بلوط" data-ar="Oak — بلوط">Oak — بلوط</div>
+        <p data-en="Low and slow. Post oak wood, offset smokers, and the patience to let time do the work. Texas BBQ isn't cooking — it's a religion of smoke, bark, and tenderness." data-ar="على نار هادية. خشب بلوط، مُدخّنات، والصبر لترك الوقت يعمل. شواء تكساس ليس مجرد طهي — إنه طقس من الدخان والقشرة والطراوة.">Low and slow. Post oak wood, offset smokers, and the patience to let time do the work. Texas BBQ isn't cooking — it's a religion of smoke, bark, and tenderness.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     FEATURES
+     ═══════════════════════════════════════════ -->
+<section class="features">
+  <div class="container">
+    <div class="features-grid fade-in stagger-children">
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <div class="feature-title" data-en="14-Hour Smoke" data-ar="تدخين ١٤ ساعة">14-Hour Smoke</div>
+        <div class="feature-desc" data-en="Our brisket is smoked low and slow over post oak for 14 hours. No shortcuts." data-ar="البريسكت مُدخّن على نار هادئة بخشب البلوط لمدة ١٤ ساعة. بدون اختصارات.">Our brisket is smoked low and slow over post oak for 14 hours. No shortcuts.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18M5 8c0 4 3 6 7 6s7-2 7-6"/><circle cx="12" cy="3" r="1"/></svg>
+        </div>
+        <div class="feature-title" data-en="Egyptian Spice" data-ar="توابل مصرية">Egyptian Spice</div>
+        <div class="feature-desc" data-en="Ancient spice blends from the Egyptian kitchen meet modern techniques on every plate." data-ar="خلطات توابل عريقة من المطبخ المصري تلتقي بالتقنيات الحديثة في كل طبق.">Ancient spice blends from the Egyptian kitchen meet modern techniques on every plate.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M12 18h.01"/></svg>
+        </div>
+        <div class="feature-title" data-en="Order via WhatsApp" data-ar="اطلب عبر واتساب">Order via WhatsApp</div>
+        <div class="feature-desc" data-en="Browse the menu, tap to order. Delivered to your door in Hurghada." data-ar="تصفّح القائمة، اضغط للطلب. يُوصل لباب بيتك في الغردقة.">Browse the menu, tap to order. Delivered to your door in Hurghada.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     MENU
+     ═══════════════════════════════════════════ -->
+<section class="menu" id="menu">
+  <div class="container">
+    <div class="menu-header fade-in">
+      <div class="section-label centered" data-en="The Menu" data-ar="القائمة">The Menu</div>
+      <h2 class="section-title" data-en="Smoked. Grilled. Served with Soul." data-ar="مُدخّن. مشوي. يُقدّم بروح.">Smoked. Grilled. Served with Soul.</h2>
+      <div class="ember-line"></div>
+      <p class="section-subtitle" style="margin: 0 auto;" data-en="Every dish tells a story of two fires meeting. Order directly via WhatsApp." data-ar="كل طبق يحكي قصة التقاء نارين. اطلب مباشرة عبر واتساب.">Every dish tells a story of two fires meeting. Order directly via WhatsApp.</p>
+    </div>
+
+    <div class="menu-tabs fade-in" id="menuTabs">
+      <button class="menu-tab active" data-category="all" data-en="All" data-ar="الكل" onclick="filterMenu('all', this)">All</button>
+      <button class="menu-tab" data-category="starters" data-en="Starters" data-ar="مقبلات" onclick="filterMenu('starters', this)">Starters</button>
+      <button class="menu-tab" data-category="seafood" data-en="Seafood" data-ar="مأكولات بحرية" onclick="filterMenu('seafood', this)">Seafood</button>
+      <button class="menu-tab" data-category="mains" data-en="Mains" data-ar="أطباق رئيسية" onclick="filterMenu('mains', this)">Mains</button>
+      <button class="menu-tab" data-category="sandwiches" data-en="Sandwiches" data-ar="ساندويتشات" onclick="filterMenu('sandwiches', this)">Sandwiches</button>
+      <button class="menu-tab" data-category="bowls" data-en="Bowls" data-ar="بولات" onclick="filterMenu('bowls', this)">Bowls</button>
+      <button class="menu-tab" data-category="sides" data-en="Sides" data-ar="أطباق جانبية" onclick="filterMenu('sides', this)">Sides</button>
+      <button class="menu-tab" data-category="desserts" data-en="Desserts" data-ar="حلويات" onclick="filterMenu('desserts', this)">Desserts</button>
+      <button class="menu-tab" data-category="drinks" data-en="Drinks" data-ar="مشروبات" onclick="filterMenu('drinks', this)">Drinks</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+      <!-- Menu items injected by JS -->
+    </div>
+
+    <div class="menu-placeholder fade-in" id="menuPlaceholder" style="display:none;">
+      <p data-en="Menu items coming soon" data-ar="قائمة الطعام قريباً">Menu items coming soon</p>
+      <small data-en="Our chefs are perfecting every dish" data-ar="طهاتنا يتقنون كل طبق">Our chefs are perfecting every dish</small>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     GALLERY
+     ═══════════════════════════════════════════ -->
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="gallery-header fade-in">
+      <div class="section-label centered" data-en="The Atmosphere" data-ar="الأجواء">The Atmosphere</div>
+      <h2 class="section-title" data-en="Where Smoke Meets the Sea" data-ar="حيث يلتقي الدخان بالبحر">Where Smoke Meets the Sea</h2>
+      <div class="ember-line"></div>
+    </div>
+
+    <div class="gallery-grid fade-in stagger-children">
+      <div class="gallery-item">
+        <div class="gallery-placeholder-icon">🔥</div>
+        <div class="gallery-placeholder-text" data-en="The Pit" data-ar="المُدخّنة">The Pit</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder-icon">🥩</div>
+        <div class="gallery-placeholder-text" data-en="Brisket Close-Up" data-ar="بريسكت">Brisket Close-Up</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder-icon">🪵</div>
+        <div class="gallery-placeholder-text" data-en="Oak Wood Detail" data-ar="تفاصيل الخشب">Oak Wood Detail</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder-icon">🍽️</div>
+        <div class="gallery-placeholder-text" data-en="Table Setting" data-ar="المائدة">Table Setting</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder-icon">🌅</div>
+        <div class="gallery-placeholder-text" data-en="Red Sea View" data-ar="إطلالة البحر">Red Sea View</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<footer id="contact">
+  <div class="container">
+    <div class="footer-grid fade-in">
+      <div>
+        <div class="footer-brand"><span>NAR</span> & OAK</div>
+        <div class="footer-brand-ar">نار وأوك</div>
+        <p class="footer-desc" data-en="Texas smoke meets Egyptian fire on the shores of the Red Sea. Low. Slow. Soul." data-ar="دخان تكساس يلتقي بنار مصر على شواطئ البحر الأحمر. على نار هادية. بروح.">Texas smoke meets Egyptian fire on the shores of the Red Sea. Low. Slow. Soul.</p>
+      </div>
+      <div>
+        <div class="footer-heading" data-en="Visit" data-ar="زيارة">Visit</div>
+        <ul class="footer-links">
+          <li><a href="#" data-en="Hurghada, Red Sea, Egypt" data-ar="الغردقة، البحر الأحمر، مصر">Hurghada, Red Sea, Egypt</a></li>
+          <li><a href="#" data-en="Open Daily: 12pm - 12am" data-ar="يومياً: ١٢ ظهراً – ١٢ منتصف الليل">Open Daily: 12pm - 12am</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading" data-en="Navigate" data-ar="تصفّح">Navigate</div>
+        <ul class="footer-links">
+          <li><a href="#story" data-en="Our Story" data-ar="قصتنا">Our Story</a></li>
+          <li><a href="#menu" data-en="Menu" data-ar="القائمة">Menu</a></li>
+          <li><a href="#gallery" data-en="Gallery" data-ar="المعرض">Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading" data-en="Order" data-ar="اطلب">Order</div>
+        <ul class="footer-links">
+          <li><a href="#" id="footerWhatsapp" data-en="WhatsApp Order" data-ar="اطلب عبر واتساب">WhatsApp Order</a></li>
+          <li><a href="#" data-en="Reservations" data-ar="حجز">Reservations</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Nar & Oak. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="#" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="#" title="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48 6.3 6.3 0 001.86-4.49V8.76a8.26 8.26 0 004.72 1.48V6.8a4.83 4.83 0 01-1-.11z"/></svg>
+        </a>
+        <a href="#" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp Floating Button -->
+<a class="whatsapp-float" id="whatsappFloat" href="#" target="_blank" title="Order via WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- ═══════════════════════════════════════════
+     CART DRAWER
+     ═══════════════════════════════════════════ -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-header">
+    <h3 data-en="Your Cart" data-ar="سلتك">Your Cart</h3>
+    <button class="cart-close-btn" onclick="toggleCart()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="cart-drawer-body" id="cartDrawerBody">
+    <div class="cart-empty" id="cartEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:16px;opacity:0.3"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      <p data-en="Your cart is empty" data-ar="سلتك فارغة">Your cart is empty</p>
+      <small data-en="Browse our menu and add items" data-ar="تصفح قائمتنا وأضف أصنافاً">Browse our menu and add items</small>
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-drawer-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total">
+      <span data-en="Total" data-ar="المجموع">Total</span>
+      <span id="cartTotal">0 EGP</span>
+    </div>
+    <button class="cart-checkout-btn" onclick="openCheckout()" data-en="Proceed to Checkout" data-ar="متابعة الطلب">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHECKOUT MODAL
+     ═══════════════════════════════════════════ -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <button class="checkout-close" onclick="closeCheckout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="checkout-progress" id="checkoutProgress">
+      <div class="checkout-progress-step active" data-step="1">1</div>
+      <div class="checkout-progress-line"></div>
+      <div class="checkout-progress-step" data-step="2">2</div>
+      <div class="checkout-progress-line"></div>
+      <div class="checkout-progress-step" data-step="3">3</div>
+    </div>
+
+    <!-- Step 1: Order Summary -->
+    <div class="checkout-step active" id="checkoutStep1">
+      <h3 data-en="Order Summary" data-ar="ملخص الطلب">Order Summary</h3>
+      <div id="checkoutSummary"></div>
+      <div class="cart-total" style="margin-top:16px;">
+        <span data-en="Total" data-ar="المجموع">Total</span>
+        <span id="checkoutTotal">0 EGP</span>
+      </div>
+      <button class="cart-checkout-btn" onclick="goToStep(2)" data-en="Continue" data-ar="متابعة">Continue</button>
+    </div>
+
+    <!-- Step 2: Payment & Delivery Time -->
+    <div class="checkout-step" id="checkoutStep2">
+      <h3 data-en="Payment & Delivery" data-ar="الدفع والتوصيل">Payment & Delivery</h3>
+
+      <label class="checkout-section-label" data-en="Payment Method" data-ar="طريقة الدفع">Payment Method</label>
+      <div class="payment-options" id="paymentOptions">
+        <div class="payment-option selected" data-method="cash" onclick="selectPayment(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 12h.01M18 12h.01"/></svg>
+          <span data-en="Cash on Delivery" data-ar="الدفع عند الاستلام">Cash on Delivery</span>
+        </div>
+        <div class="payment-option" data-method="instapay" onclick="selectPayment(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/><path d="M6 16h4"/></svg>
+          <span>InstaPay</span>
+        </div>
+        <div class="payment-option" data-method="visa" onclick="selectPayment(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/><path d="M6 16h.01M10 16h4"/></svg>
+          <span data-en="Visa / Card" data-ar="فيزا / بطاقة">Visa / Card</span>
+        </div>
+      </div>
+
+      <label class="checkout-section-label" style="margin-top:24px;" data-en="Delivery Time" data-ar="وقت التوصيل">Delivery Time</label>
+      <div class="time-options" id="timeOptions"></div>
+
+      <div style="display:flex;gap:12px;margin-top:24px;">
+        <button class="cart-checkout-btn" style="background:transparent;border:1px solid var(--smoke);color:var(--sand);flex:1;" onclick="goToStep(1)" data-en="Back" data-ar="رجوع">Back</button>
+        <button class="cart-checkout-btn" style="flex:2;" onclick="goToStep(3)" data-en="Continue" data-ar="متابعة">Continue</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Checkout Path -->
+    <div class="checkout-step" id="checkoutStep3">
+      <h3 data-en="How would you like to order?" data-ar="كيف تريد الطلب؟">How would you like to order?</h3>
+
+      <div class="checkout-paths">
+        <button class="checkout-path-btn whatsapp" onclick="checkoutWhatsApp()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span data-en="Order via WhatsApp" data-ar="اطلب عبر واتساب">Order via WhatsApp</span>
+          <small data-en="Quick & easy — no account needed" data-ar="سريع وسهل — بدون تسجيل">Quick & easy — no account needed</small>
+        </button>
+        <button class="checkout-path-btn website" onclick="showWebsiteCheckout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 9h20"/><circle cx="8" cy="6" r="1"/><circle cx="12" cy="6" r="1"/></svg>
+          <span data-en="Order on Website" data-ar="اطلب عبر الموقع">Order on Website</span>
+          <small data-en="Register or login for delivery" data-ar="سجّل أو ادخل للتوصيل">Register or login for delivery</small>
+        </button>
+      </div>
+
+      <!-- Website checkout: Auth + Address -->
+      <div id="websiteCheckoutForm" style="display:none;">
+        <div class="auth-tabs" id="authTabs">
+          <button class="auth-tab active" onclick="switchAuthTab('login', this)" data-en="Login" data-ar="تسجيل دخول">Login</button>
+          <button class="auth-tab" onclick="switchAuthTab('register', this)" data-en="Register" data-ar="تسجيل جديد">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm">
+          <div class="checkout-form-group">
+            <label data-en="Email" data-ar="البريد الإلكتروني">Email</label>
+            <input class="checkout-input" type="email" id="loginEmail" placeholder="email@example.com">
+          </div>
+          <div class="checkout-form-group">
+            <label data-en="Password" data-ar="كلمة المرور">Password</label>
+            <input class="checkout-input" type="password" id="loginPassword" placeholder="••••••••">
+          </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" style="display:none;">
+          <div class="checkout-form-group">
+            <label data-en="Full Name" data-ar="الاسم الكامل">Full Name</label>
+            <input class="checkout-input" type="text" id="regName" placeholder="">
+          </div>
+          <div class="checkout-form-group">
+            <label data-en="Email" data-ar="البريد الإلكتروني">Email</label>
+            <input class="checkout-input" type="email" id="regEmail" placeholder="email@example.com">
+          </div>
+          <div class="checkout-form-group">
+            <label data-en="Phone" data-ar="الهاتف">Phone</label>
+            <input class="checkout-input" type="tel" id="regPhone" placeholder="+20...">
+          </div>
+          <div class="checkout-form-group">
+            <label data-en="Password" data-ar="كلمة المرور">Password</label>
+            <input class="checkout-input" type="password" id="regPassword" placeholder="••••••••">
+          </div>
+        </div>
+
+        <!-- Delivery Address (shown after auth) -->
+        <div id="addressSection" style="display:none;">
+          <label class="checkout-section-label" style="margin-top:20px;" data-en="Delivery Address" data-ar="عنوان التوصيل">Delivery Address</label>
+          <div class="checkout-form-group">
+            <label data-en="Area / District" data-ar="المنطقة">Area / District</label>
+            <input class="checkout-input" type="text" id="addressArea" placeholder="">
+          </div>
+          <div class="checkout-form-group">
+            <label data-en="Street & Building" data-ar="الشارع والمبنى">Street & Building</label>
+            <input class="checkout-input" type="text" id="addressStreet" placeholder="">
+          </div>
+          <div class="checkout-form-group">
+            <label data-en="Floor / Apt (optional)" data-ar="الطابق / الشقة (اختياري)">Floor / Apt (optional)</label>
+            <input class="checkout-input" type="text" id="addressFloor" placeholder="">
+          </div>
+          <div class="checkout-form-group">
+            <label data-en="Phone Number" data-ar="رقم الهاتف">Phone Number</label>
+            <input class="checkout-input" type="tel" id="addressPhone" placeholder="+20...">
+          </div>
+          <div class="checkout-form-group">
+            <label data-en="Notes (optional)" data-ar="ملاحظات (اختياري)">Notes (optional)</label>
+            <input class="checkout-input" type="text" id="addressNotes" placeholder="">
+          </div>
+        </div>
+
+        <button class="cart-checkout-btn" style="margin-top:16px;" id="websiteSubmitBtn" onclick="handleWebsiteAuth()" data-en="Login & Continue" data-ar="دخول ومتابعة">Login & Continue</button>
+      </div>
+
+      <button class="cart-checkout-btn" style="background:transparent;border:1px solid var(--smoke);color:var(--sand);margin-top:16px;" onclick="goToStep(2)" data-en="Back" data-ar="رجوع">Back</button>
+    </div>
+
+    <!-- Confirmation Screen -->
+    <div class="checkout-step" id="checkoutConfirm" style="display:none;">
+      <div class="checkout-confirm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--ember)" stroke-width="2" style="width:64px;height:64px;margin-bottom:16px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <h3 data-en="Order Confirmed!" data-ar="تم تأكيد الطلب!">Order Confirmed!</h3>
+        <p class="checkout-confirm-order-id" id="confirmOrderId"></p>
+        <p id="confirmMessage" data-en="You will receive a confirmation via email shortly." data-ar="ستتلقى تأكيداً عبر البريد الإلكتروني قريباً.">You will receive a confirmation via email shortly.</p>
+        <button class="cart-checkout-btn" style="margin-top:24px;" onclick="closeCheckout()" data-en="Done" data-ar="تم">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════ -->
+<script>
+// ── Config ──
+const WHATSAPP_NUMBER = '201234567890';
+const CURRENCY = 'EGP';
+
+// ── Menu Data (25 Items) ──
+const menuData = [
+  // ── STARTERS & SHAREABLES ──
+  {
+    category: 'starters',
+    name: { en: 'Bread & Smoke', ar: 'خبز ودخان' },
+    desc: { en: 'Warm aish baladi baked to order on the Santa Maria grill, served puffed and steaming with smoked butter, smokehouse dukkah with olive oil, charred tomato shatta, and labneh with za\'atar oil.', ar: 'عيش بلدي دافئ مخبوز على الطلب على شواية سانتا ماريا، يُقدّم منتفخًا مع زبدة مدخنة ودقة المدخن وشطة طماطم متفحمة ولبنة بزيت الزعتر.' },
+    price: '80-100',
+    basePrice: 80,
+    tags: ['shareables'],
+    image: 'https://images.unsplash.com/photo-1771574208560-ac3d331329f2?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'starters',
+    name: { en: 'Chili Lemon Wings', ar: 'أجنحة الليمون الحار' },
+    desc: { en: 'Chicken wings rubbed with Aleppo pepper, cumin, and smoked paprika. Slow-smoked 45 min then seared on Santa Maria for crispy skin. Finished with charred lemon and smoked salt. Served with toum.', ar: 'أجنحة دجاج بفلفل حلبي وكمون وبابريكا مدخنة، مدخنة ٤٥ دقيقة ثم محروقة على سانتا ماريا. تُنهى بليمون متفحم وملح مدخن مع توم.' },
+    price: '140-160',
+    basePrice: 140,
+    tags: ['popular'],
+    image: 'https://images.unsplash.com/photo-1739869503097-af2b02ffb23b?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'starters',
+    name: { en: 'Pitmaster\'s Burnt Ends', ar: 'أطراف بريسكت المحروقة' },
+    desc: { en: 'Cubed point-end brisket smoked 14 hours, glazed with pomegranate molasses BBQ sauce — pomegranate, charred tomato dakka, date syrup, smoked paprika — then back in the smoker until sticky-caramelized. Served in a mini cast iron with pickled turnips.', ar: 'مكعبات بريسكت مدخنة ١٤ ساعة مغلفة بصلصة باربكيو دبس الرمان ثم تعود للمدخن حتى تتكرمل. تُقدّم في مقلاة حديد صب مع لفت مخلل.' },
+    price: '160-180',
+    basePrice: 160,
+    tags: ['signature'],
+    image: 'https://images.unsplash.com/photo-1756912641606-88fa74182ac9?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'starters',
+    name: { en: 'Fire-Roasted Baba Ganoush', ar: 'بابا غنوج محمص على النار' },
+    desc: { en: 'Whole eggplants charred directly in Santa Maria embers until collapsed. The smoky flesh is blended with tahini, raw garlic, and lemon. Topped with pomegranate seeds and smokehouse dukkah. Served with warm aish baladi. Fully vegan.', ar: 'باذنجان كامل متفحم في جمر سانتا ماريا، يُمزج مع طحينة وثوم وليمون. يُزيّن ببذور رمان ودقة المدخن مع عيش بلدي دافئ. نباتي.' },
+    price: '90-110',
+    basePrice: 90,
+    tags: ['vegetarian'],
+    image: 'https://images.unsplash.com/photo-1763637674539-5ef67d4a4506?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'starters',
+    name: { en: 'Smoked Halloumi & Honey', ar: 'حلومي مدخن وعسل' },
+    desc: { en: 'Thick-cut halloumi cold-smoked for an hour over applewood, then seared golden on Santa Maria. Drizzled with wildflower honey and date syrup, scattered with crushed pistachios and smokehouse dukkah, finished with black pepper and fresh mint.', ar: 'حلومي مدخن باردًا على خشب تفاح، محروق على سانتا ماريا. مرشوش بعسل زهور وفستق ودقة المدخن مع نعناع طازج.' },
+    price: '120-140',
+    basePrice: 120,
+    tags: ['popular'],
+    image: 'https://images.unsplash.com/photo-1688940737480-bee66f221b61?w=600&h=400&fit=crop'
+  },
+  // ── SEAFOOD ──
+  {
+    category: 'seafood',
+    name: { en: 'The Sultan\'s Catch — Whole Grilled Red Sea Fish', ar: 'صيد السلطان — سمك البحر الأحمر الكامل' },
+    desc: { en: 'Whole Red Sea hammour/grouper rubbed with cumin, coriander, turmeric, and olive oil. Grilled whole on the adjustable Santa Maria grill — starting high for gentle cooking, lowered for final char. Served on a wooden board with charred lemon, tarator sauce, house torshi, and warm aish baladi.', ar: 'هامور البحر الأحمر كامل بكمون وكزبرة وكركم، مشوي على سانتا ماريا. يُقدّم على لوح خشبي مع ليمون متفحم وطراطور وطرشي وعيش بلدي.' },
+    price: '300-400',
+    basePrice: 300,
+    tags: ['market price'],
+    image: 'https://images.unsplash.com/photo-1768322264423-4b0adf0cf31b?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'seafood',
+    name: { en: 'Red Sea Renga', ar: 'رنجة البحر الأحمر' },
+    desc: { en: 'King mackerel fillets hot-smoked over fruitwood for 2 hours until flaky and golden. Served Egyptian renga-style: sliced white onion, diced tomato, fresh lemon, tahini sauce, pickled turnips, and warm aish baladi to build your own wraps.', ar: 'فيليه ماكريل مدخن حارًا على خشب فاكهة لساعتين. يُقدّم بأسلوب الرنجة المصرية مع بصل وطماطم وطحينة ولفت مخلل وعيش بلدي.' },
+    price: '170-200',
+    basePrice: 170,
+    tags: ['egyptian'],
+    image: 'https://images.unsplash.com/photo-1612426357506-8b66a851fbe6?w=600&h=400&fit=crop'
+  },
+  // ── SMOKED MEATS & MAINS ──
+  {
+    category: 'mains',
+    name: { en: 'The 14-Hour Brisket', ar: 'بريسكت الـ ١٤ ساعة' },
+    desc: { en: 'Whole packer brisket — certified halal Brazilian beef — rubbed with coarse black pepper, smoked salt, and a touch of cumin. Smoked overnight at 225\u00B0F for 14 full hours. Thick-sliced against the grain revealing a deep pink smoke ring. Served with charred tomato dakka, house torshi, sumac-pickled onions, and your choice of two sides.', ar: 'بريسكت كامل — لحم بقري برازيلي حلال — بفلفل أسود وملح مدخن وكمون، مدخن ١٤ ساعة. يُقدّم مع دقة طماطم متفحمة وطرشي وبصل بالسماق وطبقين جانبيين.' },
+    price: '320-380',
+    basePrice: 320,
+    tags: ['signature', 'slow-smoked'],
+    image: 'https://images.unsplash.com/photo-1614231556674-f91780097f53?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'mains',
+    name: { en: 'The Tomahawk', ar: 'التوماهوك' },
+    desc: { en: 'Bone-in tomahawk ribeye — premium halal Australian or Brazilian import — reverse-seared on the Santa Maria grill. Starts high above the coals for slow cooking, then lowered for fierce searing. Finished tableside with melting smoked butter and cascading smoked salt. Served on a wooden board with charred onions, grilled peppers, and shatta.', ar: 'توماهوك ريب آي بالعظم — حلال فاخر — محمص عكسيًا على سانتا ماريا. يُنهى على الطاولة بزبدة مدخنة وملح مدخن مع بصل متفحم وفلفل مشوي.' },
+    price: '420-480',
+    basePrice: 420,
+    tags: ['premium'],
+    image: 'https://images.unsplash.com/photo-1690983322475-29a61c585204?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'mains',
+    name: { en: 'Wood-Fire Rotisserie Chicken', ar: 'دجاج مشوي على الحطب' },
+    desc: { en: 'Halal chicken brined overnight in salt, sugar, garlic, and baharat. Mounted on the rotisserie and slow-roasted over wood coals, continuously basted with smoked butter and lemon juice. The skin crisps to a glossy mahogany shell. Served with toum, shatta, and your choice of one side.', ar: 'دجاج حلال مملح طوال الليل ببهارات سبعة، محمص على الشواية الدوارة بزبدة مدخنة وليمون. يُقدّم مع توم وشطة وطبق جانبي.' },
+    price: '240-280',
+    basePrice: 240,
+    tags: ['popular'],
+    image: 'https://images.unsplash.com/photo-1763747669306-229a06c35641?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'mains',
+    name: { en: 'Pomegranate Lamb Ribs', ar: 'ريش خروف بالرمان' },
+    desc: { en: 'Rack of halal Australian lamb ribs rubbed with smoked paprika, cumin, and coriander. Smoked 4 hours. In the final hour, repeatedly glazed with pomegranate molasses BBQ sauce — pomegranate, date syrup, charred tomato dakka, cinnamon, and Aleppo pepper. The glaze caramelizes to a sticky ruby varnish. Finished with fresh pomegranate seeds and mint.', ar: 'ريش خروف أسترالي حلال مدخنة ٤ ساعات، مطلية بصلصة باربكيو دبس الرمان حتى تتكرمل. تُنهى ببذور رمان ونعناع.' },
+    price: '320-380',
+    basePrice: 320,
+    tags: ['signature'],
+    image: 'https://images.unsplash.com/photo-1760348644133-6c7eda6187bf?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'mains',
+    name: { en: 'Pitmaster\'s Feast for Two', ar: 'وليمة رئيس الشواء لشخصين' },
+    desc: { en: 'The grand sharing platter on an 18-inch acacia board lined with butcher paper. Features: 14-hour brisket slices, rotisserie chicken quarter, pomegranate lamb ribs, and smoked beef kofta. Surrounded by smoked freekeh pilaf, apple coleslaw, house torshi, warm aish baladi, and three sauces — charred tomato dakka, tahini, and toum. Finished with smokehouse dukkah.', ar: 'طبق المشاركة الكبير: بريسكت ودجاج مشوي وريش خروف وكفتة مدخنة مع فريكة وكولسلو وطرشي وعيش بلدي وثلاث صلصات.' },
+    price: '650-750',
+    basePrice: 650,
+    tags: ['signature', 'for two'],
+    image: 'https://images.unsplash.com/photo-1692311358804-34b31f6ef43c?w=600&h=400&fit=crop'
+  },
+  // ── SANDWICHES ──
+  {
+    category: 'sandwiches',
+    name: { en: 'Harissa Honey Smoked Chicken', ar: 'دجاج مدخن بالهريسة والعسل' },
+    desc: { en: 'Pulled rotisserie chicken thigh coated in harissa-honey glaze, stuffed into grilled aish baladi with crunchy apple coleslaw, pickled turnips, and tahini drizzle. The bread is pressed on Santa Maria until charred and crispy outside.', ar: 'دجاج مشوي مسحوب بطلاء هريسة وعسل، محشو في عيش بلدي مشوي مع كولسلو التفاح ولفت مخلل وطحينة.' },
+    price: '180-220',
+    basePrice: 180,
+    tags: ['popular'],
+    image: 'https://images.unsplash.com/photo-1769871357354-aebf6fa96efb?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'sandwiches',
+    name: { en: 'Smokehouse Hawawshi', ar: 'حواوشي المدخنة' },
+    desc: { en: 'Egyptian street food reborn. Chopped 14-hour smoked brisket — not raw ground meat — mixed with onion, green pepper, parsley, and traditional hawawshi spices (cumin, coriander, allspice, paprika, cinnamon, cardamom). Stuffed in aish baladi, pressed and grilled on Santa Maria until crispy. Served with charred tomato dakka and house torshi.', ar: 'بريسكت مدخن ١٤ ساعة مفروم مع بصل وفلفل وتوابل الحواوشي التقليدية، محشو في عيش بلدي ومشوي على سانتا ماريا. مع دقة طماطم وطرشي.' },
+    price: '200-240',
+    basePrice: 200,
+    tags: ['signature', 'egyptian'],
+    image: 'https://images.unsplash.com/photo-1769884401369-fe8dc4797440?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'sandwiches',
+    name: { en: 'Smoked Lamb Shawarma', ar: 'شاورما خروف مدخنة' },
+    desc: { en: 'Lamb shoulder rubbed with full shawarma spices — cumin, coriander, cardamom, cinnamon, turmeric, allspice, black pepper, garlic — smoked 6 hours until fork-tender. Pulled and piled into warm aish baladi with toum, sumac-pickled red onions, sliced tomato, and parsley-mint shatta. Wrapped tight.', ar: 'كتف خروف بتوابل شاورما كاملة مدخن ٦ ساعات، مسحوب في عيش بلدي مع توم وبصل بالسماق وطماطم وشطة بقدونس ونعناع.' },
+    price: '220-250',
+    basePrice: 220,
+    tags: ['fusion'],
+    image: 'https://images.unsplash.com/photo-1596995804697-27d11d43652e?w=600&h=400&fit=crop'
+  },
+  // ── BOWLS ──
+  {
+    category: 'bowls',
+    name: { en: 'Smoky Koshari Bowl', ar: 'بول كشري مدخن' },
+    desc: { en: 'Egypt\'s national dish with a smokehouse soul. Layered base of Egyptian rice, brown lentils, elbow macaroni, and chickpeas. Topped with charred tomato dakka and a mountain of crispy fried onions. Finished with garlic-cumin dakka sauce and shatta. Available plain (vegan) or crowned with smoked brisket slices.', ar: 'الكشري المصري بروح المدخنة. أرز وعدس ومعكرونة وحمص مع دقة طماطم متفحمة وبصل مقرمش. نباتي أو مع بريسكت مدخن.' },
+    price: '150-220',
+    basePrice: 150,
+    tags: ['egyptian', 'vegan option'],
+    image: 'https://images.unsplash.com/photo-1646980990815-1e97d5ee932f?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'bowls',
+    name: { en: 'Egyptian Cowboy Rice Bowl', ar: 'بول أرز الكاوبوي المصري' },
+    desc: { en: 'Built on Egyptian vermicelli rice. Topped with your choice of smoked protein: brisket, rotisserie chicken, or smoked lamb. Plus Santa Maria-charred peppers and onions, charred tomato dakka, smokehouse ful, and crispy fried onion crown. Drizzled with tahini and smokehouse dukkah.', ar: 'أرز شعيرية مصري مع اختيارك من البروتين المدخن وخضار متفحمة وفول المدخنة وبصل مقرمش وطحينة ودقة المدخن.' },
+    price: '200-250',
+    basePrice: 200,
+    tags: ['fusion'],
+    image: 'https://images.unsplash.com/photo-1547516453-01c9910aafbf?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'bowls',
+    name: { en: 'Freekeh & Fire Bowl', ar: 'بول الفريكة والنار' },
+    desc: { en: 'Built on freekeh pilaf cooked with cinnamon, allspice, and caramelized onions. Topped with Santa Maria-grilled vegetables — eggplant, halloumi, charred cherry tomatoes, zucchini — tahini-lemon sauce, toasted pine nuts, fresh herbs, and pomegranate seeds. Fully vegetarian with optional smoked protein.', ar: 'فريكة بيلاف مع خضار مشوية على سانتا ماريا وحلومي وطحينة وصنوبر وبذور رمان. نباتي مع خيار إضافة بروتين مدخن.' },
+    price: '180-250',
+    basePrice: 180,
+    tags: ['vegetarian'],
+    image: 'https://images.unsplash.com/photo-1644704170910-a0cdf183649b?w=600&h=400&fit=crop'
+  },
+  // ── VEGETARIAN MAIN ──
+  {
+    category: 'mains',
+    name: { en: 'Whole Smoked Cauliflower Shawarma', ar: 'شاورما قرنبيط كاملة مدخنة' },
+    desc: { en: 'A whole cauliflower head, par-boiled, brushed with shawarma-spiced smoked butter, smoked 30 minutes, then finished with an intense sear on Santa Maria until deeply caramelized. Served whole in a cast iron skillet in a pool of tahini, drizzled with pomegranate molasses, and scattered with toasted pine nuts, pomegranate seeds, fresh parsley, and smokehouse dukkah.', ar: 'قرنبيط كامل بزبدة مدخنة متبلة بالشاورما، مدخن ومحروق على سانتا ماريا. يُقدّم في مقلاة حديد صب مع طحينة ودبس رمان وصنوبر وبذور رمان ودقة المدخن.' },
+    price: '240-270',
+    basePrice: 240,
+    tags: ['vegetarian', 'signature'],
+    image: 'https://images.unsplash.com/photo-1613743983303-b3e89f8a2b80?w=600&h=400&fit=crop'
+  },
+  // ── SIDES ──
+  {
+    category: 'sides',
+    name: { en: 'Apple Coleslaw', ar: 'كولسلو التفاح' },
+    desc: { en: 'Finely shredded green and red cabbage with Granny Smith apple, grated carrot, and fresh mint in a yogurt-lemon-apple cider vinegar dressing with a touch of honey. Finished with toasted sesame.', ar: 'كرنب مبشور مع تفاح أخضر وجزر ونعناع في تتبيلة زبادي وليمون وخل تفاح. منهي بسمسم محمص.' },
+    price: '50-70',
+    basePrice: 50,
+    tags: ['fresh'],
+    image: 'https://images.unsplash.com/photo-1600607700607-bf154beb191f?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'sides',
+    name: { en: 'Smoked Freekeh Pilaf', ar: 'فريكة بيلاف مدخنة' },
+    desc: { en: 'Cracked freekeh toasted in olive oil with onion, cooked in spiced broth with cinnamon, allspice, and bay leaves. Finished with caramelized onions, toasted almonds, and a knob of smoked butter. Naturally smoky grain.', ar: 'فريكة مجروشة مطبوخة في مرق متبل مع قرفة وبهار. تُنهى ببصل مكرمل ولوز محمص وزبدة مدخنة.' },
+    price: '60-80',
+    basePrice: 60,
+    tags: ['vegetarian'],
+    image: 'https://images.unsplash.com/photo-1612708074992-c7936e82c99b?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'sides',
+    name: { en: 'Smokehouse Ful', ar: 'فول المدخنة' },
+    desc: { en: 'Dried fava beans slow-cooked overnight in the smoker alongside the brisket, absorbing hours of wood smoke into their creamy core. Served Egyptian-style: good olive oil, lemon squeeze, cumin, diced tomato and onion, a hit of shatta, with warm aish baladi. Zero extra labor — fully vegan.', ar: 'فول مجفف مطبوخ طوال الليل في المدخن مع البريسكت. يُقدّم بزيت زيتون وليمون وكمون وطماطم وبصل وشطة مع عيش بلدي. نباتي.' },
+    price: '60-80',
+    basePrice: 60,
+    tags: ['vegan', 'egyptian'],
+    image: 'https://images.unsplash.com/photo-1605402966404-ec40b9bd5009?w=600&h=400&fit=crop'
+  },
+  // ── DESSERTS ──
+  {
+    category: 'desserts',
+    name: { en: 'Cast Iron Kunafa', ar: 'كنافة الحديد الصب' },
+    desc: { en: 'Butter-soaked kataifi threads layered with stretchy mozzarella and ashta cream in a cast iron skillet, placed on Santa Maria over indirect heat. The bottom crisps golden while the filling melts to a gooey heart. Flipped and drenched in orange blossom-rose water syrup. Finished with crushed pistachios, honey drizzle, and a whisper of smoked salt.', ar: 'كتايف بالزبدة مع موزاريلا وقشطة في حديد صب على سانتا ماريا. تُغرق في شربات زهر البرتقال وماء الورد مع فستق وعسل وملح مدخن.' },
+    price: '120-150',
+    basePrice: 120,
+    tags: ['signature'],
+    image: 'https://images.unsplash.com/photo-1767796777227-32ef3200fab8?w=600&h=400&fit=crop'
+  },
+  {
+    category: 'desserts',
+    name: { en: 'Smokehouse Umm Ali', ar: 'أم علي المدخنة' },
+    desc: { en: 'Egypt\'s legendary bread pudding. Layers of fire-charred aish baladi and grilled filo pastry in cast iron with raisins, toasted coconut, pistachios, and walnuts. Soaked in vanilla and rose water-sweetened cream. Smoked 15 min then finished on the grill until golden and bubbly. Served with vanilla ice cream and smokehouse dukkah.', ar: 'أم علي بعيش بلدي محروق وفطير مشلتت مع مكسرات وكريمة بفانيلا وماء ورد. مدخنة ثم محمرة على الشواية. مع آيس كريم ودقة المدخن.' },
+    price: '100-130',
+    basePrice: 100,
+    tags: ['egyptian'],
+    image: 'https://images.unsplash.com/photo-1626256157372-17bd6f8e8d50?w=600&h=400&fit=crop'
+  },
+  // ── DRINKS ──
+  {
+    category: 'drinks',
+    name: { en: 'Smoked Karkade Lemonade', ar: 'ليموناضة الكركديه المدخنة' },
+    desc: { en: 'A tall glass of deeply steeped karkade (Egyptian hibiscus tea) blended with fresh lemon juice and sweetened with date syrup. Served icy over crushed ice with a smoked salt rim, fresh mint garnish, and a lemon slice. Stunning ruby red color. Caffeine-free, vegan, and refreshing in Hurghada heat.', ar: 'كركديه مصري مع ليمون طازج ودبس تمر، مثلج بحافة ملح مدخن ونعناع وليمون. أحمر ياقوتي، بدون كافيين، نباتي ومنعش.' },
+    price: '60-80',
+    basePrice: 60,
+    tags: ['signature', 'vegan'],
+    image: 'https://images.unsplash.com/photo-1732901379200-04d9c714a821?w=600&h=400&fit=crop'
+  }
+];
+
+// ── State ──
+let currentLang = 'en';
+let cart = JSON.parse(localStorage.getItem('naroak_cart') || '[]');
+let currentUser = JSON.parse(localStorage.getItem('naroak_user') || 'null');
+let selectedPayment = 'cash';
+let selectedTime = '';
+let currentCheckoutStep = 1;
+let currentMenuCategory = 'all';
+
+// ── Language Toggle ──
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'ar' : 'en';
+  const html = document.documentElement;
+
+  if (currentLang === 'ar') {
+    html.setAttribute('dir', 'rtl');
+    html.setAttribute('lang', 'ar');
+    document.getElementById('langToggle').textContent = 'English';
+  } else {
+    html.setAttribute('dir', 'ltr');
+    html.setAttribute('lang', 'en');
+    document.getElementById('langToggle').textContent = 'عربي';
+  }
+
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + currentLang);
+  });
+
+  renderMenu(currentMenuCategory);
+  renderCartDrawer();
+}
+
+// ── Mobile Menu ──
+function toggleMenu() {
+  const navLinks = document.getElementById('navLinks');
+  const hamburger = document.getElementById('hamburger');
+  navLinks.classList.toggle('open');
+  hamburger.classList.toggle('active');
+}
+
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('active');
+  });
+});
+
+// ══════════════════════════════════════
+//  CART LOGIC
+// ══════════════════════════════════════
+function saveCart() {
+  localStorage.setItem('naroak_cart', JSON.stringify(cart));
+  updateCartBadge();
+}
+
+function updateCartBadge() {
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('navCartCount').textContent = count;
+  document.getElementById('mobileCartCount').textContent = count;
+  const badges = document.querySelectorAll('.nav-cart-count');
+  badges.forEach(b => b.style.display = count > 0 ? 'flex' : 'none');
+}
+
+function addToCart(itemName) {
+  const item = menuData.find(i => i.name.en === itemName);
+  if (!item) return;
+  const existing = cart.find(c => c.name === item.name.en);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ name: item.name.en, nameAr: item.name.ar, price: item.basePrice, qty: 1 });
+  }
+  saveCart();
+  renderMenu(currentMenuCategory);
+  renderCartDrawer();
+
+  // Pop animation on cart icon
+  const btn = document.getElementById('navCartBtn');
+  btn.classList.add('pop');
+  setTimeout(() => btn.classList.remove('pop'), 400);
+}
+
+function removeFromCart(itemName) {
+  cart = cart.filter(c => c.name !== itemName);
+  saveCart();
+  renderMenu(currentMenuCategory);
+  renderCartDrawer();
+}
+
+function updateQty(itemName, delta) {
+  const item = cart.find(c => c.name === itemName);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) {
+    removeFromCart(itemName);
+    return;
+  }
+  saveCart();
+  renderMenu(currentMenuCategory);
+  renderCartDrawer();
+}
+
+function getCartTotal() {
+  return cart.reduce((s, i) => s + i.price * i.qty, 0);
+}
+
+function toggleCart() {
+  const drawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('cartOverlay');
+  const isOpen = drawer.classList.contains('open');
+  drawer.classList.toggle('open');
+  overlay.classList.toggle('open');
+  document.body.style.overflow = isOpen ? '' : 'hidden';
+  if (!isOpen) renderCartDrawer();
+}
+
+function renderCartDrawer() {
+  const container = document.getElementById('cartItems');
+  const empty = document.getElementById('cartEmpty');
+  const footer = document.getElementById('cartFooter');
+
+  if (cart.length === 0) {
+    empty.style.display = 'flex';
+    container.innerHTML = '';
+    footer.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  footer.style.display = 'block';
+
+  container.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${currentLang === 'en' ? item.name : item.nameAr}</div>
+        <div class="cart-item-price">${item.price} ${CURRENCY}</div>
+      </div>
+      <div class="cart-item-controls">
+        <button class="cart-qty-btn" onclick="updateQty('${item.name.replace(/'/g, "\\'")}', -1)">-</button>
+        <span class="cart-qty-num">${item.qty}</span>
+        <button class="cart-qty-btn" onclick="updateQty('${item.name.replace(/'/g, "\\'")}', 1)">+</button>
+        <button class="cart-remove-btn" onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        </button>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('cartTotal').textContent = getCartTotal() + ' ' + CURRENCY;
+}
+
+// ══════════════════════════════════════
+//  MENU RENDERING
+// ══════════════════════════════════════
+function renderMenu(category = 'all') {
+  currentMenuCategory = category;
+  const grid = document.getElementById('menuGrid');
+  const items = category === 'all' ? menuData : menuData.filter(i => i.category === category);
+
+  grid.innerHTML = items.map((item, idx) => {
+    const inCart = cart.find(c => c.name === item.name.en);
+    const qty = inCart ? inCart.qty : 0;
+
+    return `
+    <div class="menu-item" data-category="${item.category}" style="animation: menuItemIn 0.5s ${idx * 0.06}s cubic-bezier(0.16, 1, 0.3, 1) both;">
+      <div class="menu-item-image">
+        <img src="${item.image}" alt="${item.name.en}" loading="lazy">
+      </div>
+      <div class="menu-item-body">
+        <div class="menu-item-header">
+          <div>
+            <div class="menu-item-name">${item.name[currentLang]}</div>
+            <div class="menu-item-name-ar">${currentLang === 'en' ? item.name.ar : item.name.en}</div>
+          </div>
+          <div class="menu-item-price">${item.price} ${CURRENCY}</div>
+        </div>
+        <div class="menu-item-desc">${item.desc[currentLang]}</div>
+        <div class="menu-item-tags">
+          ${item.tags.map(t => '<span class="menu-tag">' + t + '</span>').join('')}
+        </div>
+        ${qty === 0
+          ? `<button class="menu-item-order" onclick="addToCart('${item.name.en.replace(/'/g, "\\'")}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+              ${currentLang === 'en' ? 'Add to Cart' : 'أضف للسلة'}
+            </button>`
+          : `<div class="menu-cart-controls">
+              <button class="cart-qty-btn" onclick="updateQty('${item.name.en.replace(/'/g, "\\'")}', -1)">-</button>
+              <span class="cart-qty-num">${qty}</span>
+              <button class="cart-qty-btn" onclick="updateQty('${item.name.en.replace(/'/g, "\\'")}', 1)">+</button>
+            </div>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterMenu(category, btn) {
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderMenu(category);
+}
+
+// ══════════════════════════════════════
+//  CHECKOUT FLOW
+// ══════════════════════════════════════
+function openCheckout() {
+  if (cart.length === 0) return;
+  toggleCart(); // close cart drawer
+  setTimeout(() => {
+    document.getElementById('checkoutOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    goToStep(1);
+    renderCheckoutSummary();
+    generateTimeSlots();
+  }, 300);
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  // Reset steps
+  document.querySelectorAll('.checkout-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('checkoutStep1').classList.add('active');
+  document.getElementById('checkoutConfirm').style.display = 'none';
+  document.getElementById('websiteCheckoutForm').style.display = 'none';
+}
+
+function goToStep(step) {
+  currentCheckoutStep = step;
+  document.querySelectorAll('.checkout-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('checkoutStep' + step).classList.add('active');
+
+  // Update progress indicators
+  document.querySelectorAll('.checkout-progress-step').forEach(s => {
+    const sNum = parseInt(s.getAttribute('data-step'));
+    s.classList.toggle('active', sNum <= step);
+  });
+
+  // Re-render bilingual text
+  document.querySelectorAll('#checkoutOverlay [data-en]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + currentLang);
+  });
+}
+
+function renderCheckoutSummary() {
+  const container = document.getElementById('checkoutSummary');
+  container.innerHTML = cart.map(item => `
+    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-subtle);">
+      <div>
+        <div style="font-weight:500;color:var(--cream);">${currentLang === 'en' ? item.name : item.nameAr}</div>
+        <div style="font-size:13px;color:var(--smoke);">x${item.qty}</div>
+      </div>
+      <div style="color:var(--ember);font-weight:600;">${item.price * item.qty} ${CURRENCY}</div>
+    </div>
+  `).join('');
+  document.getElementById('checkoutTotal').textContent = getCartTotal() + ' ' + CURRENCY;
+}
+
+// ── Payment Selection ──
+function selectPayment(el) {
+  document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPayment = el.getAttribute('data-method');
+}
+
+// ── Time Slot Generation ──
+function generateTimeSlots() {
+  const container = document.getElementById('timeOptions');
+  const now = new Date();
+  // Round up to next 30-min mark + 30 min for prep
+  const mins = now.getMinutes();
+  const roundedMins = mins < 30 ? 30 : 60;
+  const first = new Date(now);
+  first.setMinutes(roundedMins, 0, 0);
+  if (roundedMins === 60) first.setHours(first.getHours());
+  // Add 30 min prep time
+  first.setMinutes(first.getMinutes() + 30);
+
+  let slots = [];
+  // ASAP option
+  slots.push({ label: currentLang === 'en' ? 'ASAP' : 'في أقرب وقت', sublabel: currentLang === 'en' ? '~45 min' : '~٤٥ دقيقة', value: 'asap', isAsap: true });
+
+  // Generate 6 time slots
+  for (let i = 0; i < 6; i++) {
+    const slot = new Date(first.getTime() + i * 30 * 60000);
+    const h = slot.getHours();
+    const m = slot.getMinutes();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    const timeStr = h12 + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+    slots.push({ label: timeStr, value: timeStr, isAsap: false });
+  }
+
+  container.innerHTML = slots.map((s, i) => `
+    <div class="time-option ${s.isAsap ? 'asap' : ''} ${i === 0 ? 'selected' : ''}" onclick="selectTime(this, '${s.value}')">
+      <div>${s.label}</div>
+      ${s.sublabel ? '<small>' + s.sublabel + '</small>' : ''}
+    </div>
+  `).join('');
+
+  selectedTime = 'asap';
+}
+
+function selectTime(el, value) {
+  document.querySelectorAll('.time-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTime = value;
+}
+
+// ══════════════════════════════════════
+//  WHATSAPP CHECKOUT
+// ══════════════════════════════════════
+function checkoutWhatsApp() {
+  const paymentLabels = { cash: 'Cash on Delivery', instapay: 'InstaPay', visa: 'Visa/Card' };
+  let msg = '*New Order from Nar & Oak Website*\n\n';
+  msg += '*Items:*\n';
+  cart.forEach(item => {
+    msg += `- ${item.name} x${item.qty} = ${item.price * item.qty} ${CURRENCY}\n`;
+  });
+  msg += `\n*Total: ${getCartTotal()} ${CURRENCY}*\n`;
+  msg += `*Payment: ${paymentLabels[selectedPayment]}*\n`;
+  msg += `*Delivery Time: ${selectedTime === 'asap' ? 'ASAP (~45 min)' : selectedTime}*\n`;
+
+  window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
+
+  // Show confirmation
+  showConfirmation('whatsapp');
+}
+
+// ══════════════════════════════════════
+//  WEBSITE CHECKOUT (AUTH + ADDRESS)
+// ══════════════════════════════════════
+function showWebsiteCheckout() {
+  document.getElementById('websiteCheckoutForm').style.display = 'block';
+  document.querySelector('.checkout-paths').style.display = 'none';
+
+  if (currentUser) {
+    // Already logged in — skip auth, show address
+    document.getElementById('authTabs').style.display = 'none';
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('addressSection').style.display = 'block';
+    const btn = document.getElementById('websiteSubmitBtn');
+    btn.setAttribute('data-en', 'Place Order');
+    btn.setAttribute('data-ar', 'تأكيد الطلب');
+    btn.textContent = currentLang === 'en' ? 'Place Order' : 'تأكيد الطلب';
+    btn.onclick = submitWebsiteOrder;
+  }
+}
+
+function switchAuthTab(tab, btn) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  const submitBtn = document.getElementById('websiteSubmitBtn');
+  if (tab === 'login') {
+    submitBtn.setAttribute('data-en', 'Login & Continue');
+    submitBtn.setAttribute('data-ar', 'دخول ومتابعة');
+    submitBtn.textContent = currentLang === 'en' ? 'Login & Continue' : 'دخول ومتابعة';
+  } else {
+    submitBtn.setAttribute('data-en', 'Register & Continue');
+    submitBtn.setAttribute('data-ar', 'تسجيل ومتابعة');
+    submitBtn.textContent = currentLang === 'en' ? 'Register & Continue' : 'تسجيل ومتابعة';
+  }
+}
+
+function handleWebsiteAuth() {
+  const isLogin = document.getElementById('loginForm').style.display !== 'none';
+
+  if (isLogin) {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPassword').value;
+    if (!email || !pass) { alert(currentLang === 'en' ? 'Please fill in all fields' : 'يرجى ملء جميع الحقول'); return; }
+
+    // Check localStorage users
+    const users = JSON.parse(localStorage.getItem('naroak_users') || '[]');
+    const user = users.find(u => u.email === email && u.password === pass);
+    if (!user) { alert(currentLang === 'en' ? 'Invalid email or password' : 'بريد أو كلمة مرور غير صحيحة'); return; }
+
+    currentUser = user;
+    localStorage.setItem('naroak_user', JSON.stringify(user));
+  } else {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const phone = document.getElementById('regPhone').value.trim();
+    const pass = document.getElementById('regPassword').value;
+    if (!name || !email || !phone || !pass) { alert(currentLang === 'en' ? 'Please fill in all fields' : 'يرجى ملء جميع الحقول'); return; }
+
+    const users = JSON.parse(localStorage.getItem('naroak_users') || '[]');
+    if (users.find(u => u.email === email)) { alert(currentLang === 'en' ? 'Email already registered' : 'البريد مسجل بالفعل'); return; }
+
+    const user = { name, email, phone, password: pass };
+    users.push(user);
+    localStorage.setItem('naroak_users', JSON.stringify(users));
+    currentUser = user;
+    localStorage.setItem('naroak_user', JSON.stringify(user));
+  }
+
+  // Show address section
+  document.getElementById('authTabs').style.display = 'none';
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('addressSection').style.display = 'block';
+
+  // Pre-fill phone if available
+  if (currentUser.phone) document.getElementById('addressPhone').value = currentUser.phone;
+
+  const btn = document.getElementById('websiteSubmitBtn');
+  btn.setAttribute('data-en', 'Place Order');
+  btn.setAttribute('data-ar', 'تأكيد الطلب');
+  btn.textContent = currentLang === 'en' ? 'Place Order' : 'تأكيد الطلب';
+  btn.onclick = submitWebsiteOrder;
+}
+
+function submitWebsiteOrder() {
+  const area = document.getElementById('addressArea').value.trim();
+  const street = document.getElementById('addressStreet').value.trim();
+  const phone = document.getElementById('addressPhone').value.trim();
+  if (!area || !street || !phone) { alert(currentLang === 'en' ? 'Please fill in required delivery details' : 'يرجى ملء تفاصيل التوصيل المطلوبة'); return; }
+
+  const orderId = 'NO-' + Date.now().toString(36).toUpperCase();
+  const paymentLabels = { cash: 'Cash on Delivery', instapay: 'InstaPay', visa: 'Visa/Card' };
+
+  // Build order summary for email
+  const orderDetails = {
+    id: orderId,
+    items: cart.map(i => ({ name: i.name, qty: i.qty, subtotal: i.price * i.qty })),
+    total: getCartTotal(),
+    payment: paymentLabels[selectedPayment],
+    time: selectedTime === 'asap' ? 'ASAP (~45 min)' : selectedTime,
+    address: `${area}, ${street}` + (document.getElementById('addressFloor').value ? ', ' + document.getElementById('addressFloor').value : ''),
+    phone: phone,
+    notes: document.getElementById('addressNotes').value,
+    customer: currentUser.name
+  };
+
+  // Send confirmation email via mailto fallback
+  const subject = encodeURIComponent('Order Confirmation - ' + orderId + ' | Nar & Oak');
+  let body = 'Thank you for your order, ' + currentUser.name + '!\n\n';
+  body += 'Order ID: ' + orderId + '\n\n';
+  body += 'Items:\n';
+  orderDetails.items.forEach(i => { body += '- ' + i.name + ' x' + i.qty + ' = ' + i.subtotal + ' EGP\n'; });
+  body += '\nTotal: ' + orderDetails.total + ' EGP\n';
+  body += 'Payment: ' + orderDetails.payment + '\n';
+  body += 'Delivery: ' + orderDetails.time + '\n';
+  body += 'Address: ' + orderDetails.address + '\n';
+  if (orderDetails.notes) body += 'Notes: ' + orderDetails.notes + '\n';
+
+  // Open mailto link
+  window.open('mailto:' + currentUser.email + '?subject=' + subject + '&body=' + encodeURIComponent(body));
+
+  showConfirmation('website', orderId);
+}
+
+function showConfirmation(method, orderId) {
+  document.querySelectorAll('.checkout-step').forEach(s => s.classList.remove('active'));
+  const confirm = document.getElementById('checkoutConfirm');
+  confirm.style.display = 'block';
+
+  if (orderId) {
+    document.getElementById('confirmOrderId').textContent = currentLang === 'en' ? 'Order #' + orderId : 'طلب #' + orderId;
+  } else {
+    document.getElementById('confirmOrderId').textContent = '';
+  }
+
+  const msgEl = document.getElementById('confirmMessage');
+  if (method === 'whatsapp') {
+    msgEl.setAttribute('data-en', 'Complete your order in the WhatsApp chat. We\'ll confirm shortly!');
+    msgEl.setAttribute('data-ar', 'أكمل طلبك في محادثة واتساب. سنؤكد قريباً!');
+  } else {
+    msgEl.setAttribute('data-en', 'You will receive a confirmation email shortly.');
+    msgEl.setAttribute('data-ar', 'ستتلقى بريد تأكيد قريباً.');
+  }
+  msgEl.textContent = msgEl.getAttribute('data-' + currentLang);
+
+  // Clear cart
+  cart = [];
+  saveCart();
+  renderMenu(currentMenuCategory);
+}
+
+// ── WhatsApp links ──
+const waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent("Hi! I'd like to place an order from Nar & Oak");
+document.getElementById('whatsappFloat').href = waLink;
+document.getElementById('footerWhatsapp').href = waLink;
+
+// ── Scroll Effects ──
+const scrollObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      scrollObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => {
+  scrollObserver.observe(el);
+});
+
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// Menu item animation keyframes
+const style = document.createElement('style');
+style.textContent = '@keyframes menuItemIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .nav-cart-btn.pop { animation: addToCartPop 0.4s ease; }';
+document.head.appendChild(style);
+
+// ── Smooth scroll for nav links ──
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// ── Init ──
+renderMenu();
+updateCartBadge();
+</script>
+</body>
+</html>
