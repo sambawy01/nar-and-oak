@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NAR & OAK | نار وأوك</title>
+<title>NĀR & OAK | نار وأوك</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -312,15 +312,23 @@ nav.scrolled .nav-logo img { height: 36px; }
 }
 
 .hero-tagline {
-  font-size: 12px;
+  font-size: 14.4px;
   text-transform: uppercase;
   letter-spacing: 6px;
-  color: var(--smoke);
+  color: var(--white);
   margin-bottom: 48px;
-  font-weight: 500;
+  font-weight: 700;
   opacity: 0;
   animation: heroFadeUp 1s 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.3s;
 }
+
+.hero-tagline:hover { color: var(--ember); }
+
+html[dir="rtl"] .hero-tagline svg { margin-right: 0; margin-left: 6px; }
 
 .hero-cta {
   display: inline-flex;
@@ -2209,7 +2217,7 @@ html[dir="rtl"] .checkout-close { right: auto; left: 16px; }
 <nav id="navbar">
   <div class="nav-inner">
     <div class="nav-logo">
-      <img src="logo.png" alt="Nar & Oak">
+      <img src="logo.png" alt="Nār & Oak">
     </div>
     <div class="nav-links" id="navLinks">
       <a href="#story" data-en="Our Story" data-ar="قصتنا">Our Story</a>
@@ -2237,12 +2245,12 @@ html[dir="rtl"] .checkout-close { right: auto; left: 16px; }
      ═══════════════════════════════════════════ -->
 <section class="hero" id="hero">
   <div class="hero-brand">
-    <img src="logo.png" alt="Nar & Oak">
+    <img src="logo.png" alt="Nār & Oak">
   </div>
-  <div class="hero-arabic">نار وأوك</div>
   <div class="hero-slogan" id="heroSlogan">The desert taught us fire. Texas taught us patience.</div>
-  <div class="hero-slogan-ar" id="heroSloganAr">الصحراء علمتنا النار. تكساس علمتنا الصبر.</div>
-  <div class="hero-tagline" data-en="Hurghada, Red Sea" data-ar="الغردقة، البحر الأحمر">Hurghada, Red Sea</div>
+  <a href="https://maps.google.com/?q=Hurghada,+Red+Sea,+Egypt" target="_blank" class="hero-tagline" data-en="Hurghada, Red Sea" data-ar="الغردقة، البحر الأحمر">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Hurghada, Red Sea
+  </a>
   <a href="#menu" class="hero-cta" data-en="View Menu" data-ar="عرض القائمة">View Menu</a>
   <div class="scroll-indicator">
     <span data-en="Scroll" data-ar="مرر">Scroll</span>
@@ -2264,8 +2272,8 @@ html[dir="rtl"] .checkout-close { right: auto; left: 16px; }
         <div class="section-label" data-en="Our Story" data-ar="قصتنا">Our Story</div>
         <h2 class="section-title" data-en="Two Fires. One Table." data-ar="ناران. مائدة واحدة.">Two Fires. One Table.</h2>
         <div class="ember-line"></div>
-        <p class="story-text" data-en="Before there was Nar & Oak, there were two fires burning 12,000 kilometers apart. One was born in the Egyptian desert — bread baked in sand, meat charred over open flame, thousands of years of heat and instinct. The other grew in the hills of central Texas — oak logs, low heat, fourteen hours of patience and smoke." data-ar="قبل نار وأوك، كانت هناك ناران تشتعلان على بُعد ١٢ ألف كيلومتر. واحدة وُلدت في الصحراء المصرية — خبز مخبوز في الرمل، لحم محمّر على النار المفتوحة، آلاف السنين من الحرارة والغريزة. والأخرى نمت في تلال وسط تكساس — خشب البلوط، حرارة هادئة، أربع عشرة ساعة من الصبر والدخان.">Before there was Nar & Oak, there were two fires burning 12,000 kilometers apart. One was born in the Egyptian desert — bread baked in sand, meat charred over open flame, thousands of years of heat and instinct. The other grew in the hills of central Texas — oak logs, low heat, fourteen hours of patience and smoke.</p>
-        <p class="story-text" data-en="They never should have met. But fire doesn't care about borders. Nar & Oak is where these two ancient traditions finally sit at one table, on the shores of the Red Sea." data-ar="ما كان لهما أن يلتقيا. لكن النار لا تعرف الحدود. نار وأوك هو المكان الذي تجلس فيه هاتان التقاليد العريقة أخيراً على مائدة واحدة، على شواطئ البحر الأحمر.">They never should have met. But fire doesn't care about borders. Nar & Oak is where these two ancient traditions finally sit at one table, on the shores of the Red Sea.</p>
+        <p class="story-text" data-en="Before there was Nār & Oak, there were two fires burning 12,000 kilometers apart. One was born in the Egyptian desert — bread baked in sand, meat charred over open flame, thousands of years of heat and instinct. The other grew in the hills of central Texas — oak logs, low heat, fourteen hours of patience and smoke." data-ar="قبل نار وأوك، كانت هناك ناران تشتعلان على بُعد ١٢ ألف كيلومتر. واحدة وُلدت في الصحراء المصرية — خبز مخبوز في الرمل، لحم محمّر على النار المفتوحة، آلاف السنين من الحرارة والغريزة. والأخرى نمت في تلال وسط تكساس — خشب البلوط، حرارة هادئة، أربع عشرة ساعة من الصبر والدخان.">Before there was Nār & Oak, there were two fires burning 12,000 kilometers apart. One was born in the Egyptian desert — bread baked in sand, meat charred over open flame, thousands of years of heat and instinct. The other grew in the hills of central Texas — oak logs, low heat, fourteen hours of patience and smoke.</p>
+        <p class="story-text" data-en="They never should have met. But fire doesn't care about borders. Nār & Oak is where these two ancient traditions finally sit at one table, on the shores of the Red Sea." data-ar="ما كان لهما أن يلتقيا. لكن النار لا تعرف الحدود. نار وأوك هو المكان الذي تجلس فيه هاتان التقاليد العريقة أخيراً على مائدة واحدة، على شواطئ البحر الأحمر.">They never should have met. But fire doesn't care about borders. Nār & Oak is where these two ancient traditions finally sit at one table, on the shores of the Red Sea.</p>
         <div class="story-quote">
           Fire crossed an ocean to find its other half.
           <div class="story-quote-ar">النار عبرت المحيط لتجد نصفها الآخر</div>
@@ -2276,7 +2284,7 @@ html[dir="rtl"] .checkout-close { right: auto; left: 16px; }
     <div class="two-fires fade-in stagger-children">
       <div class="fire-card egyptian">
         <h3 data-en="The Egyptian Flame" data-ar="اللهب المصري">The Egyptian Flame</h3>
-        <div class="fire-subtitle" data-en="نار — Nar" data-ar="نار — Nar">نار — Nar</div>
+        <div class="fire-subtitle" data-en="نار — Nār" data-ar="نار — Nār">نار — Nār</div>
         <p data-en="Open-fire cooking passed down through generations. Direct flame, intense heat, instinct over instruments. From clay ovens to charcoal pits — this is fire at its most primal." data-ar="طهي على النار المفتوحة توارثته الأجيال. لهب مباشر، حرارة شديدة، غريزة فوق الأدوات. من الأفران الطينية إلى حُفر الفحم — هذه هي النار في أبسط صورها.">Open-fire cooking passed down through generations. Direct flame, intense heat, instinct over instruments. From clay ovens to charcoal pits — this is fire at its most primal.</p>
       </div>
       <div class="fire-card texan">
@@ -2403,7 +2411,7 @@ html[dir="rtl"] .checkout-close { right: auto; left: 16px; }
   <div class="container">
     <div class="footer-grid fade-in">
       <div>
-        <div class="footer-brand"><span>NAR</span> & OAK</div>
+        <div class="footer-brand"><span>NĀR</span> & OAK</div>
         <div class="footer-brand-ar">نار وأوك</div>
         <p class="footer-desc" data-en="Texas smoke meets Egyptian fire on the shores of the Red Sea. Low. Slow. Soul." data-ar="دخان تكساس يلتقي بنار مصر على شواطئ البحر الأحمر. على نار هادية. بروح.">Texas smoke meets Egyptian fire on the shores of the Red Sea. Low. Slow. Soul.</p>
       </div>
@@ -2431,7 +2439,7 @@ html[dir="rtl"] .checkout-close { right: auto; left: 16px; }
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 Nar & Oak. All rights reserved.</p>
+      <p>&copy; 2026 Nār & Oak. All rights reserved.</p>
       <div class="footer-social">
         <a href="#" title="Instagram">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -3198,7 +3206,7 @@ function selectTime(el, value) {
 // ══════════════════════════════════════
 function checkoutWhatsApp() {
   const paymentLabels = { cash: 'Cash on Delivery', instapay: 'InstaPay', visa: 'Visa/Card' };
-  let msg = '*New Order from Nar & Oak Website*\n\n';
+  let msg = '*New Order from Nār & Oak Website*\n\n';
   msg += '*Items:*\n';
   cart.forEach(item => {
     msg += `- ${item.name} x${item.qty} = ${item.price * item.qty} ${CURRENCY}\n`;
@@ -3322,7 +3330,7 @@ function submitWebsiteOrder() {
   };
 
   // Send confirmation email via mailto fallback
-  const subject = encodeURIComponent('Order Confirmation - ' + orderId + ' | Nar & Oak');
+  const subject = encodeURIComponent('Order Confirmation - ' + orderId + ' | Nār & Oak');
   let body = 'Thank you for your order, ' + currentUser.name + '!\n\n';
   body += 'Order ID: ' + orderId + '\n\n';
   body += 'Items:\n';
@@ -3367,7 +3375,7 @@ function showConfirmation(method, orderId) {
 }
 
 // ── WhatsApp links ──
-const waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent("Hi! I'd like to place an order from Nar & Oak");
+const waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent("Hi! I'd like to place an order from Nār & Oak");
 document.getElementById('whatsappFloat').href = waLink;
 document.getElementById('footerWhatsapp').href = waLink;
 
