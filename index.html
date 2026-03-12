@@ -1979,35 +1979,65 @@ html[dir="rtl"] .checkout-close { right: auto; left: 16px; }
 }
 
 .checkout-path-btn {
-  padding: 20px 16px;
-  border: 1px solid var(--border-subtle);
-  background: transparent;
+  padding: 24px 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
   cursor: pointer;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: all 0.3s;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkout-path-btn svg {
+  width: 32px;
+  height: 32px;
+}
+
+.checkout-path-btn span {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cream);
+  display: block;
+}
+
+.checkout-path-btn small {
+  font-size: 13px;
+  color: rgba(232,220,200,0.6);
+  display: block;
 }
 
 .checkout-path-btn:hover { transform: translateY(-2px); }
 
 .checkout-path-btn.whatsapp {
-  border-color: rgba(37, 211, 102, 0.3);
+  border-color: rgba(37, 211, 102, 0.4);
+  color: #25D366;
 }
 
 .checkout-path-btn.whatsapp:hover {
   border-color: #25D366;
-  background: rgba(37, 211, 102, 0.08);
+  background: rgba(37, 211, 102, 0.15);
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.15);
 }
 
+.checkout-path-btn.whatsapp:hover span { color: #fff; }
+
 .checkout-path-btn.website {
-  border-color: rgba(200,75,49,0.3);
+  border-color: rgba(200,75,49,0.4);
+  color: var(--ember);
 }
 
 .checkout-path-btn.website:hover {
   border-color: var(--ember);
-  background: rgba(200,75,49,0.08);
+  background: rgba(200,75,49,0.15);
+  box-shadow: 0 4px 20px rgba(200,75,49,0.15);
 }
+
+.checkout-path-btn.website:hover span { color: #fff; }
 
 .checkout-path-icon { font-size: 28px; margin-bottom: 10px; display: block; }
 
